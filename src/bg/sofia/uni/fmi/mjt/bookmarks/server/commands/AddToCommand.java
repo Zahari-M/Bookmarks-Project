@@ -12,7 +12,7 @@ public class AddToCommand extends Command {
     private boolean shorten = false;
 
     AddToCommand(String input) {
-        Matcher matcher = CommandRegEx.ADD_TO.getPattern().matcher(input);
+        Matcher matcher = CommandPattern.ADD_TO.getPattern().matcher(input);
         matcher.find();
         this.params = new String[ARGC];
         this.params[GROUPNAME_NUMBER] = matcher.group(GROUPNAME_NUMBER);

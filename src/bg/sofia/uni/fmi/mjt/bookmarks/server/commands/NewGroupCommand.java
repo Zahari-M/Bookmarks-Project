@@ -8,7 +8,7 @@ public class NewGroupCommand extends Command {
     private static final int ARGC = 2;
 
     NewGroupCommand(String input) {
-        Matcher matcher = CommandRegEx.NEW_GROUP.getPattern().matcher(input);
+        Matcher matcher = CommandPattern.NEW_GROUP.getPattern().matcher(input);
         matcher.find();
         this.params = new String[ARGC];
         this.params[GROUPNAME_NUMBER] = matcher.group(GROUPNAME_NUMBER);

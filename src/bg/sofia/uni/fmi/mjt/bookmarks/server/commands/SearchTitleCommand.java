@@ -8,7 +8,7 @@ public class SearchTitleCommand extends Command {
     private static final int ARGC = 2;
 
     SearchTitleCommand(String input) {
-        Matcher matcher = CommandRegEx.SEARCH_TITLE.getPattern().matcher(input);
+        Matcher matcher = CommandPattern.SEARCH_TITLE.getPattern().matcher(input);
         matcher.find();
         this.params = new String[ARGC];
         this.params[TITLE_NUMBER] = matcher.group(TITLE_NUMBER);
