@@ -27,7 +27,6 @@ public class ClientRequestHandler implements Runnable {
                 System.out.println("Message received from client: " + inputLine);
                 out.println("Echo " + inputLine); // send response back to the client
             }
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
         } finally {
