@@ -6,9 +6,9 @@ public abstract class Command {
     //public abstract void execute();
 
     public static Command newCommand(String input) {
-        for (CommandRegEx regEx : CommandRegEx.values()) {
-            if (regEx.getPattern().matcher(input).matches()) {
-                return regEx.getConstructor().apply(input);
+        for (CommandPattern comPattern : CommandPattern.values()) {
+            if (comPattern.getPattern().matcher(input).matches()) {
+                return comPattern.getConstructor().apply(input);
             }
         }
         return null;

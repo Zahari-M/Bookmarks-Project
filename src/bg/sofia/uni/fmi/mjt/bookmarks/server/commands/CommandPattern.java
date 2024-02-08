@@ -3,7 +3,7 @@ package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-enum CommandRegEx {
+enum CommandPattern {
     REGISTER("^register +(\\S+) +(\\S+) *$", RegisterCommand::new),
     LOGIN("^login +(\\S+) +(\\S+) *$", LoginCommand::new),
     NEW_GROUP("^new-group +(\\S+) *$", NewGroupCommand::new),
@@ -18,7 +18,7 @@ enum CommandRegEx {
     private final Pattern pattern;
     private final Function<String, Command> constructor;
 
-    CommandRegEx(String string, Function<String, Command> constructor) {
+    CommandPattern(String string, Function<String, Command> constructor) {
         this.pattern = Pattern.compile(string);
         this.constructor = constructor;
     }
