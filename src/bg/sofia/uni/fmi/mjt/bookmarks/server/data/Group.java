@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.data;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +35,7 @@ public record Group(String groupName, List<Bookmark> bookmarks) {
         return false;
     }
 
-    public int cleanUp() {
+    public int cleanUp() throws IOException, InterruptedException {
         int count = 0;
         Iterator<Bookmark> it = bookmarks.iterator();
         while (it.hasNext()) {

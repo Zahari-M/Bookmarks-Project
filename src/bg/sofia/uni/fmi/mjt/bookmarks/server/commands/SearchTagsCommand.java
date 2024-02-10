@@ -1,5 +1,8 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
+
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -17,5 +20,10 @@ public class SearchTagsCommand extends Command {
             params.add(matcher.group(TAG_NUMBER));
         }
         this.params = params.toArray(new String[0]);
+    }
+
+    @Override
+    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
+        this.bookmarkResponses = storage.getBookmarksWithTags(List.of(params), userID);
     }
 }

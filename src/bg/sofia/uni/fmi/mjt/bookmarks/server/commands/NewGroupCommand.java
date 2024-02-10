@@ -1,5 +1,8 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
+
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class NewGroupCommand extends Command {
@@ -12,5 +15,10 @@ public class NewGroupCommand extends Command {
         matcher.find();
         this.params = new String[ARGC];
         this.params[GROUPNAME_NUMBER] = matcher.group(GROUPNAME_NUMBER);
+    }
+
+    @Override
+    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
+        storage.addNewGroup(params[GROUPNAME_NUMBER], userID);
     }
 }

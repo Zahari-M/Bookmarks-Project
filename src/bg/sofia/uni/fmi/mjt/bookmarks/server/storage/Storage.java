@@ -26,5 +26,5 @@ public interface Storage {
 
     public List<BookmarkResponse> getBookmarksWithTitle(String title, int userID) throws IOException;
 
-    public int cleanup(int userID) throws IOException;
+    public int cleanup(int userID) throws IOException, InterruptedException;
 }

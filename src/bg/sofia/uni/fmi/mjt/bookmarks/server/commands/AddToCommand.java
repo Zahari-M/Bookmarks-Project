@@ -1,9 +1,11 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
 import bg.sofia.uni.fmi.mjt.bookmarks.server.data.Bookmark;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.parser.BookmarkCreator;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 
 import java.io.IOException;
+import java.net.http.HttpClient;
 import java.util.regex.Matcher;
 
 public class AddToCommand extends Command {
@@ -12,6 +14,9 @@ public class AddToCommand extends Command {
     private static final int BOOKMARK_NUMBER = 2;
     private static final int SHORTEN_NUMBER = 3;
     private static final int ARGC = 3;
+
+    static BookmarkCreator bookmarkCreator = new BookmarkCreator(HttpClient.newHttpClient(),
+        getBitlyToken());
 
     private boolean shorten = false;
 
@@ -27,9 +32,12 @@ public class AddToCommand extends Command {
     }
 
     @Override
-    public int execute(Storage storage, int userID) throws IOException {
-        Bookmark bookmark = Bookmark.of(params[BOOKMARK_NUMBER], shorten);
+    public void execute(Storage storage, int userID) throws IOException {
+        Bookmark bookmark = bookmarkCreator.createBookmark(params[BOOKMARK_NUMBER], shorten);
         storage.addBookmarkTo(params[GROUPNAME_NUMBER], bookmark, userID);
-        return userID;
+    }
+
+    private static String getBitlyToken() {
+        return "123";
     }
 }

@@ -1,5 +1,8 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
+
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class RemoveFromCommand extends Command {
@@ -14,5 +17,10 @@ public class RemoveFromCommand extends Command {
         this.params = new String[ARGC];
         this.params[GROUPNAME_NUMBER] = matcher.group(GROUPNAME_NUMBER);
         this.params[BOOKMARK_NUMBER] = matcher.group(BOOKMARK_NUMBER);
+    }
+
+    @Override
+    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
+        storage.removeBookmarkFrom(params[GROUPNAME_NUMBER], params[BOOKMARK_NUMBER], userID);
     }
 }

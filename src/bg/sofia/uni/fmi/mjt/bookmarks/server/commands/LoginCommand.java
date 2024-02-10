@@ -1,5 +1,8 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
+
+import java.io.IOException;
 import java.util.regex.Matcher;
 
 public class LoginCommand extends Command {
@@ -14,5 +17,10 @@ public class LoginCommand extends Command {
         this.params = new String[ARGC];
         this.params[USERNAME_NUMBER] = matcher.group(USERNAME_NUMBER);
         this.params[PASSWORD_NUMBER] = matcher.group(PASSWORD_NUMBER);
+    }
+
+    @Override
+    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
+        this.userID = storage.getUser(params[USERNAME_NUMBER], params[PASSWORD_NUMBER]);
     }
 }

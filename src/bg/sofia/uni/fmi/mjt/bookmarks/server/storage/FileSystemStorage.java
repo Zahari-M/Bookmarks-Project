@@ -13,11 +13,8 @@ import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.GroupNotFoundException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.IncorrectPasswordException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserAlreadyExistsException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserNotFoundException;
-import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -145,7 +142,7 @@ public class FileSystemStorage implements Storage {
     }
 
     @Override
-    public int cleanup(int userID) throws IOException {
+    public int cleanup(int userID) throws IOException, InterruptedException {
         UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         int count = 0;
         for (Group group : bookmarks.groups()) {

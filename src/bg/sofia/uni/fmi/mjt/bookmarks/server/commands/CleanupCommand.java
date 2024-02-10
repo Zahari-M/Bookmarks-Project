@@ -7,8 +7,8 @@ import java.io.IOException;
 
 public class CleanupCommand extends Command {
 
-    public int execute(Storage storage, int userID) throws IOException {
+    @Override
+    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
         storage.cleanup(userID);
-        return userID;
     }
 }
