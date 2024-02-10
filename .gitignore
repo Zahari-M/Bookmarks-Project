@@ -4,6 +4,8 @@ out/
 !**/src/test/**/out/
 .idea/
 lib/
+uni-sofia.txt
+/storage/
 
 ### Eclipse ###
 .apt_generated
