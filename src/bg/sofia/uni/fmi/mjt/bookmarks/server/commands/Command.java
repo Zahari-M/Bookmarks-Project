@@ -1,9 +1,12 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
+
+import java.io.IOException;
+
 public abstract class Command {
     protected String[] params;
-
-    //public abstract void execute();
+    public abstract int execute(Storage storage, int userID) throws IOException;
 
     public static Command newCommand(String input) {
         for (CommandPattern comPattern : CommandPattern.values()) {

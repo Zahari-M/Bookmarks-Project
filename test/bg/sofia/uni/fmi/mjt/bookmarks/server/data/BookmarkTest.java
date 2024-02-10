@@ -19,6 +19,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class BookmarkTest {
 
+    private static final String uri = "https://www.uni-sofia.bg/index.php/eng";
+    private static final String HTMLFile = "./uni-sofia.txt";
     @Mock
     private HttpClient httpClient;
     @Mock
@@ -41,6 +43,4 @@ class BookmarkTest {
         //System.out.println(bookmark);
     }
 
-    private static final String uri = "https://www.uni-sofia.bg/index.php/eng";
-    private static final String HTMLFile = "./uni-sofia.txt";
 }

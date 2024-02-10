@@ -29,4 +29,18 @@ public class UserDatabase {
         }
         return null;
     }
+
+    @Override
+    public boolean equals(Object database) {
+        if (database instanceof UserDatabase) {
+            UserDatabase db = (UserDatabase)database;
+            return count == db.count && users.equals(db.users);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return count;
+    }
 }

@@ -22,31 +22,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FileSystemStorage implements Storage {
-    private static final String USERS_FILE = "users.txt";
-    private static final Gson GSON = new Gson();
-    private final Path mainDir;
-    private final Path usersDir;
-    public FileSystemStorage(String path) throws IOException {
-        this.mainDir = Path.of(path);
-        this.usersDir = mainDir.resolve(USERS_FILE);
-        setUp();
+
+    private final FileIO fileIO;
+    public FileSystemStorage(FileIO fileIO) {
+        this.fileIO = fileIO;
     }
 
     @Override
     public int addNewUser(String username, String password) throws IOException {
-        UserDatabase db = readUsers();
+        UserDatabase db = fileIO.readUsers();
         if (db.exists(username)) {
             throw new UserAlreadyExistsException("User already exists");
         }
         int id = db.addUser(username, password);
-        writeUsers(db);
-        addBookmarksFile(id);
+        fileIO.writeUsers(db);
+        fileIO.addBookmarksFile(id);
         return id;
     }
 
     @Override
     public int getUser(String username, String password) throws IOException {
-        UserDatabase db = readUsers();
+        UserDatabase db = fileIO.readUsers();
         User user = db.getUser(username);
         if (user == null) {
             throw new UserNotFoundException("User not found");
@@ -59,17 +55,17 @@ public class FileSystemStorage implements Storage {
 
     @Override
     public void addNewGroup(String groupName, int userID) throws IOException {
-        UserBookmarks bookmarks = readBookmarks(userID);
+        UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         if (bookmarks.existsGroup(groupName)) {
             throw new GroupAlreadyExistsException("Group already exists");
         }
         bookmarks.addGroup(groupName);
-        writeBookmarks(bookmarks, userID);
+        fileIO.writeBookmarks(bookmarks, userID);
     }
 
     @Override
     public void addBookmarkTo(String groupName, Bookmark bookmark, int userID) throws IOException {
-        UserBookmarks bookmarks = readBookmarks(userID);
+        UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         Group group = bookmarks.getGroup(groupName);
         if (group == null) {
             throw new GroupNotFoundException("Group not found.");
@@ -78,12 +74,12 @@ public class FileSystemStorage implements Storage {
             throw new BookmarkAlreadyExistsException("Bookmark already exists.");
         }
         group.addBookmark(bookmark);
-        writeBookmarks(bookmarks, userID);
+        fileIO.writeBookmarks(bookmarks, userID);
     }
 
     @Override
     public void removeBookmarkFrom(String groupName, String url, int userID) throws IOException {
-        UserBookmarks bookmarks = readBookmarks(userID);
+        UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         Group group = bookmarks.getGroup(groupName);
         if (group == null) {
             throw new GroupNotFoundException("Group not found.");
@@ -91,12 +87,12 @@ public class FileSystemStorage implements Storage {
         if (!group.removeBookmark(url)) {
             throw new BookmarkNotFoundException("Bookmark not found.");
         }
-        writeBookmarks(bookmarks, userID);
+        fileIO.writeBookmarks(bookmarks, userID);
     }
 
     @Override
     public List<BookmarkResponse> getAllBookmarks(int userID) throws IOException {
-        UserBookmarks bookmarks = readBookmarks(userID);
+        UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         List<BookmarkResponse> responses = new LinkedList<>();
         for (Group group : bookmarks.groups()) {
             for (Bookmark bookmark : group.bookmarks()) {
@@ -108,7 +104,7 @@ public class FileSystemStorage implements Storage {
 
     @Override
     public List<BookmarkResponse> getAllBookmarksFromGroup(String groupName, int userID) throws IOException {
-        UserBookmarks bookmarks = readBookmarks(userID);
+        UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         List<BookmarkResponse> responses = new LinkedList<>();
         Group group = bookmarks.getGroup(groupName);
         if (group == null) {
@@ -122,7 +118,7 @@ public class FileSystemStorage implements Storage {
 
     @Override
     public List<BookmarkResponse> getBookmarksWithTags(List<String> tags, int userID) throws IOException {
-        UserBookmarks bookmarks = readBookmarks(userID);
+        UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         List<BookmarkResponse> responses = new LinkedList<>();
         for (Group group : bookmarks.groups()) {
             for (Bookmark bookmark : group.bookmarks()) {
@@ -136,7 +132,7 @@ public class FileSystemStorage implements Storage {
 
     @Override
     public List<BookmarkResponse> getBookmarksWithTitle(String title, int userID) throws IOException {
-        UserBookmarks bookmarks = readBookmarks(userID);
+        UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         List<BookmarkResponse> responses = new LinkedList<>();
         for (Group group : bookmarks.groups()) {
             for (Bookmark bookmark : group.bookmarks()) {
@@ -150,47 +146,13 @@ public class FileSystemStorage implements Storage {
 
     @Override
     public int cleanup(int userID) throws IOException {
-        UserBookmarks bookmarks = readBookmarks(userID);
+        UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         int count = 0;
         for (Group group : bookmarks.groups()) {
             count += group.cleanUp();
         }
-        writeBookmarks(bookmarks, userID);
+        fileIO.writeBookmarks(bookmarks, userID);
         return count;
-    }
-
-    void setUp() throws IOException {
-        Files.createDirectories(mainDir);
-        if (Files.notExists(usersDir)) {
-            UserDatabase emptydb = new UserDatabase(0, new LinkedList<>());
-            writeUsers(emptydb);
-        }
-    }
-
-    UserDatabase readUsers() throws IOException {
-        return GSON.fromJson(Files.readString(usersDir), UserDatabase.class);
-    }
-
-    void writeUsers(UserDatabase db) throws IOException {
-        Files.writeString(usersDir, GSON.toJson(db, UserDatabase.class));
-    }
-
-    void addBookmarksFile(int userID) throws IOException {
-        writeBookmarks(new UserBookmarks(userID, new LinkedList<>()), userID);
-    }
-
-    UserBookmarks readBookmarks(int userID) throws IOException {
-        Path path = bookmarkDir(userID);
-        return GSON.fromJson(Files.readString(path), UserBookmarks.class);
-    }
-
-    void writeBookmarks(UserBookmarks bookmarks, int userID) throws IOException {
-        Path path = bookmarkDir(userID);
-        Files.writeString(path, GSON.toJson(bookmarks, UserBookmarks.class));
-    }
-
-    private Path bookmarkDir(int userID) {
-        return mainDir.resolve(Integer.toString(userID));
     }
 
 }
