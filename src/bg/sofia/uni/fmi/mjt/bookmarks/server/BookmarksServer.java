@@ -29,7 +29,7 @@ public class BookmarksServer {
                 clientSocket = serverSocket.accept();
 
                 System.out.println("Accepted connection request from client " + clientSocket.getInetAddress());
-                ClientRequestHandler clientHandler = new ClientRequestHandler(clientSocket);
+                ClientRequestHandler clientHandler = new ClientRequestHandler(clientSocket, null);
                 executor.execute(clientHandler); // use a thread pool to launch a thread
             }
 
