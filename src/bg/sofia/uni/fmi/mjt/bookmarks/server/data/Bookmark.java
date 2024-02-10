@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.data;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.dto.BookmarkResponse;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.InvalidBookmarkException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,6 +26,35 @@ public record Bookmark(String url, String title, List<String> tags) {
     private static final String STOPWORDSDIR = "./common-english-words.txt";
     private static final String SPLITREGEX = "[\\s\\p{Punct}]+";
     private static final int TAGCOUNT = 7;
+
+    public boolean containsTags(List<String> tags) {
+        for (String searchTag : tags) {
+            boolean found = false;
+            for (String tag : this.tags()) {
+                if (searchTag.equalsIgnoreCase(tag)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean hasTitle(String title) {
+        return this.title().contains(title);
+    }
+
+    public boolean valid() {
+        try {
+            getHTML(url);
+        } catch (InvalidBookmarkException e) {
+            return false;
+        }
+        return true;
+    }
 
     public static Bookmark of(String url, boolean shortened) {
         String html = getHTML(url);
