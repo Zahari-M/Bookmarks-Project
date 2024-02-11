@@ -29,11 +29,11 @@ public class FileIO {
         }
     }
 
-    UserDatabase readUsers() throws IOException {
+    synchronized UserDatabase readUsers() throws IOException {
         return GSON.fromJson(Files.readString(usersDir), UserDatabase.class);
     }
 
-    void writeUsers(UserDatabase db) throws IOException {
+    synchronized void writeUsers(UserDatabase db) throws IOException {
         Files.writeString(usersDir, GSON.toJson(db, UserDatabase.class));
     }
 

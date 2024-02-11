@@ -21,4 +21,10 @@ public class ListGroupNameCommand extends Command {
     public void execute(Storage storage, int userID) throws IOException, InterruptedException {
         this.bookmarkResponses = storage.getAllBookmarksFromGroup(params[GROUPNAME_NUMBER], userID);
     }
+
+    @Override
+    public String getSuccessMessage() {
+        return String.format("%d bookmarks in group %s:", bookmarkResponses.size(),
+            params[GROUPNAME_NUMBER]);
+    }
 }

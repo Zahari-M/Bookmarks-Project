@@ -23,4 +23,9 @@ public class RemoveFromCommand extends Command {
     public void execute(Storage storage, int userID) throws IOException, InterruptedException {
         storage.removeBookmarkFrom(params[GROUPNAME_NUMBER], params[BOOKMARK_NUMBER], userID);
     }
+
+    @Override
+    public String getSuccessMessage() {
+        return "Bookmark removed";
+    }
 }

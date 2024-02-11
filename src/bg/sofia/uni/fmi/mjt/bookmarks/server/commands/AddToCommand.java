@@ -37,7 +37,12 @@ public class AddToCommand extends Command {
         storage.addBookmarkTo(params[GROUPNAME_NUMBER], bookmark, userID);
     }
 
-    private static String getBitlyToken() {
+    @Override
+    public String getSuccessMessage() {
+        return "Bookmark added";
+    }
+
+    static String getBitlyToken() {
         return "123";
     }
 }

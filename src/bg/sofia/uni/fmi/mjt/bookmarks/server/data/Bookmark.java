@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.data;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.parser.BookmarkCreator;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,12 +15,14 @@ public record Bookmark(String url, String title, List<String> tags) {
     public boolean containsTags(List<String> tags) {
         for (String searchTag : tags) {
             boolean found = false;
+            String strippedSearchTag = BookmarkCreator.strip(searchTag);
             for (String tag : this.tags()) {
-                if (searchTag.equalsIgnoreCase(tag)) {
+                if (searchTag.equalsIgnoreCase(tag) || strippedSearchTag.equalsIgnoreCase(tag)) {
                     found = true;
                     break;
                 }
             }
+
             if (!found) {
                 return false;
             }
@@ -27,7 +31,7 @@ public record Bookmark(String url, String title, List<String> tags) {
     }
 
     public boolean hasTitle(String title) {
-        return this.title().contains(title);
+        return this.title().toLowerCase().contains(title.toLowerCase());
     }
 
     public boolean valid() throws IOException, InterruptedException {

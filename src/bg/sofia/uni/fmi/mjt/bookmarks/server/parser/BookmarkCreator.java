@@ -65,7 +65,7 @@ public class BookmarkCreator {
         return response.body();
     }
 
-    private static String strip(String word) {
+    public static String strip(String word) {
         for (String suffix : SUFFIXES) {
             if (word.endsWith(suffix)) {
                 return word.substring(0, word.length() - suffix.length());

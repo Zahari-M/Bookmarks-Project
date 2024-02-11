@@ -22,4 +22,9 @@ public class RegisterCommand extends Command {
     public void execute(Storage storage, int userID) throws IOException, InterruptedException {
         this.userID = storage.addNewUser(params[USERNAME_NUMBER], params[PASSWORD_NUMBER]);
     }
+
+    @Override
+    public String getSuccessMessage() {
+        return "Registration successful";
+    }
 }

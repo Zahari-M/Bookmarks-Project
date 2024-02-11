@@ -26,4 +26,9 @@ public class SearchTagsCommand extends Command {
     public void execute(Storage storage, int userID) throws IOException, InterruptedException {
         this.bookmarkResponses = storage.getBookmarksWithTags(List.of(params), userID);
     }
+
+    @Override
+    public String getSuccessMessage() {
+        return String.format("%d bookmarks found:", bookmarkResponses.size());
+    }
 }

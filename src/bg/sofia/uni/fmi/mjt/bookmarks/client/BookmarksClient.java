@@ -1,5 +1,9 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.client;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.dto.ServerResponse;
+import com.google.gson.Gson;
+import com.google.gson.internal.bind.util.ISO8601Utils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +14,7 @@ import java.util.Scanner;
 public class BookmarksClient {
 
     private static final int SERVER_PORT = 4444;
-
+    private static Gson gson = new Gson();
     public static void main(String[] args) {
 
         try (Socket socket = new Socket("localhost", SERVER_PORT);
@@ -18,28 +22,21 @@ public class BookmarksClient {
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              Scanner scanner = new Scanner(System.in)) {
 
-            Thread.currentThread().setName("Echo client thread " + socket.getLocalPort());
-
-            System.out.println("Connected to the server.");
-
             while (true) {
-                System.out.print("Enter message: ");
-                String message = scanner.nextLine(); // read a line from the console
+                System.out.print("Enter command: ");
+                String message = scanner.nextLine();
 
                 if ("quit".equals(message)) {
                     break;
                 }
 
-                System.out.println("Sending message <" + message + "> to the server...");
-
-                writer.println(message); // send the message to the server
-
-                String reply = reader.readLine(); // read the response from the server
-                System.out.println("The server replied <" + reply + ">");
+                writer.println(message);
+                String reply = reader.readLine();
+                ServerResponse response = gson.fromJson(reply, ServerResponse.class);
+                response.print(System.out);
             }
-
         } catch (IOException e) {
-            throw new RuntimeException("There is a problem with the network communication", e);
+            System.out.println("There is a problem with the network communication");
         }
     }
 }

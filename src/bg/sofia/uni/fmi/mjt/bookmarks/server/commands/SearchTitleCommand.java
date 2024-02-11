@@ -21,4 +21,9 @@ public class SearchTitleCommand extends Command {
     public void execute(Storage storage, int userID) throws IOException, InterruptedException {
         this.bookmarkResponses = storage.getBookmarksWithTitle(params[TITLE_NUMBER], userID);
     }
+
+    @Override
+    public String getSuccessMessage() {
+        return String.format("%d bookmarks found:", bookmarkResponses.size());
+    }
 }

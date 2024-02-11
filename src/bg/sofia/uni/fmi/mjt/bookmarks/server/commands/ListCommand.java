@@ -10,4 +10,9 @@ public class ListCommand extends Command {
     public void execute(Storage storage, int userID) throws IOException, InterruptedException {
         this.bookmarkResponses = storage.getAllBookmarks(userID);
     }
+
+    @Override
+    public String getSuccessMessage() {
+        return String.format("You have %d bookmarks:", bookmarkResponses.size());
+    }
 }

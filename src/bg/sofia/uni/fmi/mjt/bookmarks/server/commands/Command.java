@@ -21,7 +21,7 @@ public abstract class Command {
         return new ServerResponse(getSuccessMessage(), bookmarkResponses);
     }
 
-    protected abstract String getSuccessMessage();
+    public abstract String getSuccessMessage();
 
     public static Command newCommand(String input) {
         for (CommandPattern comPattern : CommandPattern.values()) {
@@ -30,5 +30,9 @@ public abstract class Command {
             }
         }
         return null;
+    }
+
+    public static boolean logInCommand(Command command) {
+        return command instanceof LoginCommand || command instanceof RegisterCommand;
     }
 }

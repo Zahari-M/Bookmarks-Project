@@ -21,4 +21,9 @@ public class NewGroupCommand extends Command {
     public void execute(Storage storage, int userID) throws IOException, InterruptedException {
         storage.addNewGroup(params[GROUPNAME_NUMBER], userID);
     }
+
+    @Override
+    public String getSuccessMessage() {
+        return "New group created";
+    }
 }
