@@ -2,7 +2,6 @@ package bg.sofia.uni.fmi.mjt.bookmarks.client;
 
 import bg.sofia.uni.fmi.mjt.bookmarks.dto.ServerResponse;
 import com.google.gson.Gson;
-import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

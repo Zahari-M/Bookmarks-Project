@@ -6,6 +6,8 @@ out/
 lib/
 uni-sofia.txt
 /storage/
+/errors.txt
+/src.zip
 
 ### Eclipse ###
 .apt_generated

@@ -23,7 +23,7 @@ public class BookmarksServer {
         try {
             storage = new FileSystemStorage(new FileIO(STORAGE_DIR));
         } catch (IOException e) {
-            ClientRequestHandler.writeException(e);
+            ClientRequestHandler.writeException(e, -1);
             return;
         }
 
@@ -40,7 +40,7 @@ public class BookmarksServer {
             }
 
         } catch (IOException e) {
-            ClientRequestHandler.writeException(e);
+            ClientRequestHandler.writeException(e, -1);
         }
     }
 

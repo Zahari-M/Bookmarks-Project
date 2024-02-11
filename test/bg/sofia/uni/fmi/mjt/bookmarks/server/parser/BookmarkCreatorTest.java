@@ -26,7 +26,7 @@ class BookmarkCreatorTest {
     @Mock
     private HttpResponse<String> httpResponse;
     @org.junit.jupiter.api.Test
-    void of() throws Exception {
+    void createBookmarkTest() throws Exception {
         String html = Files.readString(Path.of(HTMLFile));
         when(httpResponse.body()).thenReturn(html);
         when(httpResponse.statusCode()).thenReturn(200);
