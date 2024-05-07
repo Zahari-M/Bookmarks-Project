@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.BookmarkNotFoundException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.GroupNotFoundException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 
 import java.io.IOException;
@@ -20,7 +22,8 @@ public class RemoveFromCommand extends Command {
     }
 
     @Override
-    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
+    public void execute(Storage storage, int userID)
+        throws IOException, InterruptedException, BookmarkNotFoundException, GroupNotFoundException {
         storage.removeBookmarkFrom(params[GROUPNAME_NUMBER], params[BOOKMARK_NUMBER], userID);
     }
 

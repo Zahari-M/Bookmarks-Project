@@ -1,6 +1,9 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
 import bg.sofia.uni.fmi.mjt.bookmarks.server.data.Bookmark;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.BookmarkAlreadyExistsException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.GroupNotFoundException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.InvalidBookmarkException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.parser.BookmarkCreator;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 
@@ -32,7 +35,8 @@ public class AddToCommand extends Command {
     }
 
     @Override
-    public void execute(Storage storage, int userID) throws IOException {
+    public void execute(Storage storage, int userID)
+        throws IOException, InvalidBookmarkException, GroupNotFoundException, BookmarkAlreadyExistsException {
         Bookmark bookmark = bookmarkCreator.createBookmark(params[BOOKMARK_NUMBER], shorten);
         storage.addBookmarkTo(params[GROUPNAME_NUMBER], bookmark, userID);
     }

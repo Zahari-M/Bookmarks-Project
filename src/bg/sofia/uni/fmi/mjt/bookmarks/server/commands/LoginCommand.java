@@ -1,5 +1,7 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.IncorrectPasswordException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserNotFoundException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 
 import java.io.IOException;
@@ -20,7 +22,8 @@ public class LoginCommand extends Command {
     }
 
     @Override
-    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
+    public void execute(Storage storage, int userID)
+        throws IOException, InterruptedException, UserNotFoundException, IncorrectPasswordException {
         this.userID = storage.getUser(params[USERNAME_NUMBER], params[PASSWORD_NUMBER]);
     }
 

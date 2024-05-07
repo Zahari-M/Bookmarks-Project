@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserAlreadyExistsException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 
 import java.io.IOException;
@@ -19,7 +20,8 @@ public class RegisterCommand extends Command {
     }
 
     @Override
-    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
+    public void execute(Storage storage, int userID)
+        throws IOException, InterruptedException, UserAlreadyExistsException {
         this.userID = storage.addNewUser(params[USERNAME_NUMBER], params[PASSWORD_NUMBER]);
     }
 

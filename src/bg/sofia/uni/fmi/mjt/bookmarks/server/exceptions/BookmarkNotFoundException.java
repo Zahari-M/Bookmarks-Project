@@ -1,6 +1,6 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions;
 
-public class BookmarkNotFoundException extends RuntimeException {
+public class BookmarkNotFoundException extends UserException {
     public BookmarkNotFoundException() {
     }
 

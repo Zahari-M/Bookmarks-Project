@@ -1,5 +1,6 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.GroupNotFoundException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class ListGroupNameCommand extends Command {
     }
 
     @Override
-    public void execute(Storage storage, int userID) throws IOException, InterruptedException {
+    public void execute(Storage storage, int userID) throws IOException, InterruptedException, GroupNotFoundException {
         this.bookmarkResponses = storage.getAllBookmarksFromGroup(params[GROUPNAME_NUMBER], userID);
     }
 

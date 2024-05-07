@@ -6,7 +6,14 @@ import bg.sofia.uni.fmi.mjt.bookmarks.server.data.Group;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.data.User;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.data.UserBookmarks;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.data.UserDatabase;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.BookmarkAlreadyExistsException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.BookmarkNotFoundException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.GroupAlreadyExistsException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.GroupNotFoundException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.IncorrectPasswordException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserAlreadyExistsException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +58,7 @@ class FileSystemStorageTest {
     private FileSystemStorage fileSystemStorage;
 
     @Test
-    void addNewUser() throws IOException{
+    void addNewUser() throws IOException, UserAlreadyExistsException {
         when(fileIO.readUsers()).thenReturn(emptyUsers);
         int id = fileSystemStorage.addNewUser(username, pass);
         assertEquals(USERID1, id, "Add user correct id test");
@@ -60,28 +67,28 @@ class FileSystemStorageTest {
     }
 
     @Test
-    void getUser() throws IOException {
+    void getUser() throws IOException, UserNotFoundException, IncorrectPasswordException {
         when(fileIO.readUsers()).thenReturn(users);
         int id = fileSystemStorage.getUser(username, pass);
         assertEquals(USERID1, id, "Test get user with id 1");
     }
 
     @Test
-    void addNewGroup() throws IOException {
+    void addNewGroup() throws IOException, GroupAlreadyExistsException {
         when(fileIO.readBookmarks(USERID1)).thenReturn(userBookmarksEmpty);
         fileSystemStorage.addNewGroup(groupName, USERID1);
         verify(fileIO).writeBookmarks(userBookmarksEmptyGroup, USERID1);
     }
 
     @Test
-    void addBookmarkTo() throws IOException {
+    void addBookmarkTo() throws IOException, GroupNotFoundException, BookmarkAlreadyExistsException {
         when(fileIO.readBookmarks(USERID1)).thenReturn(userBookmarksEmptyGroup);
         fileSystemStorage.addBookmarkTo(groupName, bookmark, USERID1);
         verify(fileIO).writeBookmarks(userBookmarks, USERID1);
     }
 
     @Test
-    void removeBookmarkFrom() throws IOException {
+    void removeBookmarkFrom() throws IOException, BookmarkNotFoundException, GroupNotFoundException {
         when(fileIO.readBookmarks(USERID1)).thenReturn(userBookmarks);
         fileSystemStorage.removeBookmarkFrom(groupName, bookmark.url(), USERID1);
         verify(fileIO).writeBookmarks(userBookmarksEmptyGroup, USERID1);
@@ -96,7 +103,7 @@ class FileSystemStorageTest {
     }
 
     @Test
-    void getAllBookmarksFromGroup() throws IOException {
+    void getAllBookmarksFromGroup() throws IOException, GroupNotFoundException {
         when(fileIO.readBookmarks(USERID1)).thenReturn(userBookmarks);
         List<BookmarkResponse> responses =
             fileSystemStorage.getAllBookmarksFromGroup(groupName, USERID1);

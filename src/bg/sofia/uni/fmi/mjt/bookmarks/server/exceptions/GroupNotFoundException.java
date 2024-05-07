@@ -1,6 +1,6 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions;
 
-public class GroupNotFoundException extends RuntimeException {
+public class GroupNotFoundException extends UserException {
     public GroupNotFoundException() {
     }
 

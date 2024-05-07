@@ -2,6 +2,7 @@ package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
 import bg.sofia.uni.fmi.mjt.bookmarks.dto.BookmarkResponse;
 import bg.sofia.uni.fmi.mjt.bookmarks.dto.ServerResponse;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ public abstract class Command {
     protected String[] params;
     protected int userID = -1;
     protected List<BookmarkResponse> bookmarkResponses = null;
-    public abstract void execute(Storage storage, int userID) throws IOException, InterruptedException;
+    public abstract void execute(Storage storage, int userID) throws IOException, InterruptedException, UserException;
 
     public int getUserID() {
         return userID;

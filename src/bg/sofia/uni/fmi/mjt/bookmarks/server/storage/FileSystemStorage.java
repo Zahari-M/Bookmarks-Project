@@ -26,7 +26,7 @@ public class FileSystemStorage implements Storage {
     }
 
     @Override
-    public int addNewUser(String username, String password) throws IOException {
+    public int addNewUser(String username, String password) throws IOException, UserAlreadyExistsException {
         UserDatabase db = fileIO.readUsers();
         if (db.exists(username)) {
             throw new UserAlreadyExistsException("User already exists");
@@ -38,7 +38,7 @@ public class FileSystemStorage implements Storage {
     }
 
     @Override
-    public int getUser(String username, String password) throws IOException {
+    public int getUser(String username, String password) throws IOException, UserNotFoundException, IncorrectPasswordException {
         UserDatabase db = fileIO.readUsers();
         User user = db.getUser(username);
         if (user == null) {
@@ -51,7 +51,7 @@ public class FileSystemStorage implements Storage {
     }
 
     @Override
-    public void addNewGroup(String groupName, int userID) throws IOException {
+    public void addNewGroup(String groupName, int userID) throws IOException, GroupAlreadyExistsException {
         UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         if (bookmarks.existsGroup(groupName)) {
             throw new GroupAlreadyExistsException("Group already exists");
@@ -61,7 +61,8 @@ public class FileSystemStorage implements Storage {
     }
 
     @Override
-    public void addBookmarkTo(String groupName, Bookmark bookmark, int userID) throws IOException {
+    public void addBookmarkTo(String groupName, Bookmark bookmark, int userID)
+        throws IOException, GroupNotFoundException, BookmarkAlreadyExistsException {
         UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         Group group = bookmarks.getGroup(groupName);
         if (group == null) {
@@ -75,7 +76,8 @@ public class FileSystemStorage implements Storage {
     }
 
     @Override
-    public void removeBookmarkFrom(String groupName, String url, int userID) throws IOException {
+    public void removeBookmarkFrom(String groupName, String url, int userID) throws IOException,
+        GroupNotFoundException, BookmarkNotFoundException {
         UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         Group group = bookmarks.getGroup(groupName);
         if (group == null) {
@@ -100,7 +102,8 @@ public class FileSystemStorage implements Storage {
     }
 
     @Override
-    public List<BookmarkResponse> getAllBookmarksFromGroup(String groupName, int userID) throws IOException {
+    public List<BookmarkResponse> getAllBookmarksFromGroup(String groupName, int userID)
+        throws IOException, GroupNotFoundException {
         UserBookmarks bookmarks = fileIO.readBookmarks(userID);
         List<BookmarkResponse> responses = new LinkedList<>();
         Group group = bookmarks.getGroup(groupName);

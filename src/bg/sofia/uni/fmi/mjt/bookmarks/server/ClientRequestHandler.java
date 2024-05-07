@@ -2,6 +2,7 @@ package bg.sofia.uni.fmi.mjt.bookmarks.server;
 
 import bg.sofia.uni.fmi.mjt.bookmarks.dto.ServerResponse;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.commands.Command;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 import com.google.gson.Gson;
 
@@ -19,6 +20,7 @@ public class ClientRequestHandler implements Runnable {
     private static Gson gson = new Gson();
     private static final Path ERRORFILE = Path.of("./errors.txt");
 
+    private static final String SERVER_ERROR_MESSAGE = "Server Error";
     private static final int GUEST = -1;
     private Storage storage;
     private int userID = GUEST;
@@ -56,19 +58,21 @@ public class ClientRequestHandler implements Runnable {
         try {
             Command command = Command.newCommand(inputLine);
             if (command == null) {
-                throw new UnsupportedOperationException("Unknown command.");
+                throw new UserException("Unknown command.");
             }
             if (userID == GUEST && !Command.logInCommand(command)) {
-                throw new UnsupportedOperationException("You are not logged in.");
+                throw new UserException("You are not logged in.");
             }
             command.execute(storage, userID);
             if (Command.logInCommand(command)) {
                 userID = command.getUserID();
             }
             return command.getServerResponse();
+        } catch (UserException e) {
+            return new ServerResponse(e.getMessage(), null);
         } catch (Exception e) {
             writeException(e, userID);
-            return new ServerResponse(e.getMessage(), null);
+            return new ServerResponse(SERVER_ERROR_MESSAGE, null);
         }
     }
 

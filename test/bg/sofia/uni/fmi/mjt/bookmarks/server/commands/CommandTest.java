@@ -1,6 +1,8 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.commands;
 
 import bg.sofia.uni.fmi.mjt.bookmarks.server.data.Bookmark;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.InvalidBookmarkException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserException;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.parser.BookmarkCreator;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.storage.Storage;
 import org.junit.jupiter.api.Test;
@@ -32,7 +34,7 @@ class CommandTest {
     private static final String pass = "123";
 
     @Test
-    void AddToTest() throws IOException, InterruptedException {
+    void AddToTest() throws IOException, InterruptedException, UserException {
         Bookmark bookmark = new Bookmark(url, null, null);
 
         AddToCommand.bookmarkCreator = mock();
@@ -49,55 +51,55 @@ class CommandTest {
     }
 
     @Test
-    void cleanUpTest() throws IOException, InterruptedException {
+    void cleanUpTest() throws IOException, InterruptedException, UserException {
         command = Command.newCommand("cleanup   ");
         command.execute(storage, USERID);
         verify(storage).cleanup(USERID);
     }
 
     @Test
-    void listTest() throws IOException, InterruptedException {
+    void listTest() throws IOException, InterruptedException, UserException {
         command = Command.newCommand("list  ");
         command.execute(storage, USERID);
         verify(storage).getAllBookmarks(USERID);
     }
 
     @Test
-    void listGroupNameTest() throws IOException, InterruptedException {
+    void listGroupNameTest() throws IOException, InterruptedException, UserException {
         command = Command.newCommand(String.format("list  --group-name  %s  ", group));
         command.execute(storage, USERID);
         verify(storage).getAllBookmarksFromGroup(group, USERID);
     }
 
     @Test
-    void loginCommandTest() throws IOException, InterruptedException {
+    void loginCommandTest() throws IOException, InterruptedException, UserException {
         command = Command.newCommand(String.format("login  %s  %s ", username, pass));
         command.execute(storage, USERID);
         verify(storage).getUser(username, pass);
     }
 
     @Test
-    void newGroupTest() throws IOException, InterruptedException {
+    void newGroupTest() throws IOException, InterruptedException, UserException {
         command = Command.newCommand(String.format("new-group   %s  ", group));
         command.execute(storage, USERID);
         verify(storage).addNewGroup(group, USERID);
     }
     @Test
-    void registerTest() throws IOException, InterruptedException {
+    void registerTest() throws IOException, InterruptedException, UserException {
         command = Command.newCommand(String.format("register  %s  %s ", username, pass));
         command.execute(storage, USERID);
         verify(storage).addNewUser(username, pass);
     }
 
     @Test
-    void removeFromTest() throws IOException, InterruptedException {
+    void removeFromTest() throws IOException, InterruptedException, UserException {
         command = Command.newCommand(String.format("remove-from  %s  %s", group, url));
         command.execute(storage, USERID);
         verify(storage).removeBookmarkFrom(group, url, USERID);
     }
 
     @Test
-    void searchTagsTest() throws IOException, InterruptedException {
+    void searchTagsTest() throws IOException, InterruptedException, UserException {
         List<String> tags = List.of("apple", "rice", "mushroom");
         command = Command.newCommand(String.format("search   --tags %s   %s   %s ", tags.toArray()));
         command.execute(storage, USERID);
@@ -105,7 +107,7 @@ class CommandTest {
     }
 
     @Test
-    void searchTitleTest() throws IOException, InterruptedException {
+    void searchTitleTest() throws IOException, InterruptedException, UserException {
         String title = "masterchef";
         command = Command.newCommand(String.format("search   --title  %s ", title));
         command.execute(storage, USERID);

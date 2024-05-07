@@ -1,6 +1,6 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions;
 
-public class InvalidBookmarkException extends RuntimeException {
+public class InvalidBookmarkException extends UserException {
     public InvalidBookmarkException() {
     }
 

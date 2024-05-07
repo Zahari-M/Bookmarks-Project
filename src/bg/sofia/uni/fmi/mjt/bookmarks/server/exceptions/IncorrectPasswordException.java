@@ -1,6 +1,6 @@
 package bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions;
 
-public class IncorrectPasswordException extends RuntimeException {
+public class IncorrectPasswordException extends UserException {
     public IncorrectPasswordException() {
     }
 

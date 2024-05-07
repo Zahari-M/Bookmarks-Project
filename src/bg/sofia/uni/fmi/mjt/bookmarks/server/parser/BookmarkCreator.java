@@ -2,6 +2,7 @@ package bg.sofia.uni.fmi.mjt.bookmarks.server.parser;
 
 import bg.sofia.uni.fmi.mjt.bookmarks.server.data.Bookmark;
 import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.InvalidBookmarkException;
+import bg.sofia.uni.fmi.mjt.bookmarks.server.exceptions.UserException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -32,7 +33,7 @@ public class BookmarkCreator {
         this.bitlyToken = bitlyToken;
     }
 
-    public Bookmark createBookmark(String url, boolean shortened) {
+    public Bookmark createBookmark(String url, boolean shortened) throws InvalidBookmarkException {
         String html = getHTML(url);
         Document document = Jsoup.parse(html);
         String title = document.title();
@@ -51,7 +52,7 @@ public class BookmarkCreator {
         return new Bookmark(url, title, tags);
     }
 
-    private String getHTML(String url) {
+    private String getHTML(String url) throws InvalidBookmarkException {
         HttpRequest request = HttpRequest.newBuilder(URI.create(url)).build();
         HttpResponse<String> response;
         try {
